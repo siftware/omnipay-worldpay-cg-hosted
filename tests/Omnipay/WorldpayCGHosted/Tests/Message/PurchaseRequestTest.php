@@ -4,7 +4,10 @@ namespace Omnipay\WorldpayCGHosted\Tests\Message;
 
 use Omnipay\Common\CreditCard;
 use Omnipay\Tests\TestCase;
+use Omnipay\WorldpayCGHosted\AuthenticationRiskData;
 use Omnipay\WorldpayCGHosted\Message\PurchaseRequest;
+use Omnipay\WorldpayCGHosted\ShopperAccountRiskData;
+use Omnipay\WorldpayCGHosted\TransactionRiskData;
 
 class PurchaseRequestTest extends TestCase
 {
@@ -34,6 +37,40 @@ class PurchaseRequestTest extends TestCase
             'shippingCountry' => 'GB',
             'billingPostcode' => 'N16 8UX',
             'shippingPostcode' => 'N16 8UX',
+        ]));
+        $this->purchase->setAuthenticationRiskData(new AuthenticationRiskData(
+            [                
+                'authenticationTimestamp' => new \DateTime('now'),
+                'authenticationMethod' => AuthenticationRiskData::AUTHENTICATION_METHOD_LOCAL_ACCOUNT,
+            ]
+        ));
+        $this->purchase->setShopperAccountRiskData(new ShopperAccountRiskData([
+                'shopperAccountCreationDate' => new \DateTime('now'),
+                'shopperAccountModificationDate' => new \DateTime('now'),
+                'shopperAccountPasswordChangeDate' => new \DateTime('now'),
+                'shopperAccountShippingAddressFirstUseDate' => new \DateTime('now'),
+                'shopperAccountPaymentAccountFirstUseDate' => new \DateTime('now'),
+                'transactionsAttemptedLastDay' => 2,
+                'transactionsAttemptedLastYear' => 10,
+                'purchasesCompletedLastSixMonths' => 3,
+                'addCardAttemptsLastDay' => 1,
+                'previousSuspiciousActivity' => false,
+                'shippingNameMatchesAccountName' => true,
+                'shopperAccountAgeIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_AGE_INDICATOR_MORE_THAN_SIXTY_DAYS,
+                'shopperAccountChangeIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_CHANGE_INDICATOR_MORE_THAN_SIXTY_DAYS,
+                'shopperAccountPasswordChangeIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_PASSWORD_CHANGE_INDICATOR_NO_CHANGE,
+                'shopperAccountShippingAddressUsageIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_SHIPPING_ADDRESS_USAGE_INDICATOR_MORE_THAN_SIXTY_DAYS,
+                'shopperAccountPaymentAccountIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_PAYMENT_ACCOUNT_INDICATOR_MORE_THAN_SIXTY_DAYS,
+        ]));
+        $this->purchase->setTransactionRiskData(new TransactionRiskData([
+            'transactionRiskDataGiftCardAmount' => 34,
+            'transactionRiskDataPreOrderDate' => new \DateTime('now'),
+            'shippingMethod' => TransactionRiskData::SHIPPING_METHOD_SHIP_TO_STORE,
+            'deliveryTimeframe' => TransactionRiskData::DELIVERY_TIMEFRAME_OVERNIGHT_SHIPPING,
+            'deliveryEmailAddress' => 'test@email.local',
+            'reorderingPreviousPurchases' => false,
+            'preOrderPurchase' => false,
+            'giftCardCount' => 1,
         ]));
     }
 
@@ -184,6 +221,18 @@ class PurchaseRequestTest extends TestCase
         $purchase->setTestMode(false);
         $liveEndpoint = $getEndpoint->invokeArgs($purchase, []);
         $this->assertEquals('https://secure.worldpay.com/jsp/merchant/xml/paymentService.jsp', $liveEndpoint);
+    }
+    
+    public function testOptionalDataOnlySupportedParameters()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new AuthenticationRiskData(
+            [
+                'authenticationTimestamp' => new \DateTime('now'),
+                'authenticationMethod' => AuthenticationRiskData::AUTHENTICATION_METHOD_LOCAL_ACCOUNT,
+                'badArgument' => 'badArgument',
+            ]
+        );
     }
 
     protected static function getMethod($name)
