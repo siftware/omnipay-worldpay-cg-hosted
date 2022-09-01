@@ -4,7 +4,10 @@ namespace Omnipay\WorldpayCGHosted\Tests;
 
 use Omnipay\Common\CreditCard;
 use Omnipay\Tests\GatewayTestCase;
+use Omnipay\WorldpayCGHosted\AuthenticationRiskData;
 use Omnipay\WorldpayCGHosted\Gateway;
+use Omnipay\WorldpayCGHosted\ShopperAccountRiskData;
+use Omnipay\WorldpayCGHosted\TransactionRiskData;
 
 class GatewayTest extends GatewayTestCase
 {
@@ -14,6 +17,12 @@ class GatewayTest extends GatewayTestCase
     private $parameters;
     /** @var CreditCard */
     private $card;
+    /** @var AuthenticationRiskData */
+    private $authenticationRiskData;
+    /** @var ShopperAccountRiskData */
+    private $shopperAccountRiskData;
+    /** @var TransactionRiskData */
+    private $transactionRiskData;
 
     public function setUp()
     {
@@ -54,6 +63,43 @@ class GatewayTest extends GatewayTestCase
             'shippingCountry' => 'GB',
             'billingPostcode' => 'N16 8UX',
             'shippingPostcode' => 'N16 8UX',
+        ]);
+
+        $this->authenticationRiskData = new AuthenticationRiskData(
+            [
+                'authenticationTimestamp' => new \DateTime('now'),
+                'authenticationMethod' => AuthenticationRiskData::AUTHENTICATION_METHOD_LOCAL_ACCOUNT,
+            ]
+        );
+
+        $this->shopperAccountRiskData = new ShopperAccountRiskData([
+            'shopperAccountCreationDate' => new \DateTime('now'),
+            'shopperAccountModificationDate' => new \DateTime('now'),
+            'shopperAccountPasswordChangeDate' => new \DateTime('now'),
+            'shopperAccountShippingAddressFirstUseDate' => new \DateTime('now'),
+            'shopperAccountPaymentAccountFirstUseDate' => new \DateTime('now'),
+            'transactionsAttemptedLastDay' => 2,
+            'transactionsAttemptedLastYear' => 10,
+            'purchasesCompletedLastSixMonths' => 3,
+            'addCardAttemptsLastDay' => 1,
+            'previousSuspiciousActivity' => false,
+            'shippingNameMatchesAccountName' => true,
+            'shopperAccountAgeIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_AGE_INDICATOR_MORE_THAN_SIXTY_DAYS,
+            'shopperAccountChangeIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_CHANGE_INDICATOR_MORE_THAN_SIXTY_DAYS,
+            'shopperAccountPasswordChangeIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_PASSWORD_CHANGE_INDICATOR_NO_CHANGE,
+            'shopperAccountShippingAddressUsageIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_SHIPPING_ADDRESS_USAGE_INDICATOR_MORE_THAN_SIXTY_DAYS,
+            'shopperAccountPaymentAccountIndicator' => ShopperAccountRiskData::SHOPPER_ACCOUNT_PAYMENT_ACCOUNT_INDICATOR_MORE_THAN_SIXTY_DAYS,
+        ]);
+        
+        $this->transactionRiskData = new TransactionRiskData([
+            'transactionRiskDataGiftCardAmount' => 34,
+            'transactionRiskDataPreOrderDate' => new \DateTime('now'),
+            'shippingMethod' => TransactionRiskData::SHIPPING_METHOD_SHIP_TO_STORE,
+            'deliveryTimeframe' => TransactionRiskData::DELIVERY_TIMEFRAME_OVERNIGHT_SHIPPING,
+            'deliveryEmailAddress' => 'test@email.local',
+            'reorderingPreviousPurchases' => false,
+            'preOrderPurchase' => false,
+            'giftCardCount' => 1,
         ]);
     }
 
@@ -194,5 +240,25 @@ class GatewayTest extends GatewayTestCase
         // verify username parameter set works
         $this->gateway->setParameter('username', 'test_username');
         $this->assertEquals('test_username', $this->gateway->getUsername());
+    }
+
+    public function testRiskDataRequestDataSetUp()
+    {
+        $purchase = $this->gateway->purchase($this->parameters);
+        $purchase->setCard($this->card);
+        $purchase->setAuthenticationRiskData($this->authenticationRiskData);
+        $purchase->setShopperAccountRiskData($this->shopperAccountRiskData);
+        $purchase->setTransactionRiskData($this->transactionRiskData);
+
+        // Confirm basic auth uses merchant code to authenticate when there's no username.
+        $this->assertEquals('ACMECO', $purchase->getUsername());
+
+        /** @var \SimpleXMLElement $data */
+        $data = $purchase->getData();
+        /** @var \SimpleXMLElement $order */
+        $riskData = $data->submit->riskData;
+
+        $this->assertInstanceOf(\SimpleXMLElement::class, $data);
+        $this->assertInstanceOf(\SimpleXMLElement::class, $riskData);
     }
 }
