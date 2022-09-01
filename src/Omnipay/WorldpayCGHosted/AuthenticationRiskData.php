@@ -5,17 +5,7 @@ namespace Omnipay\WorldpayCGHosted;
 use DateTimeInterface;
 
 class AuthenticationRiskData extends OptionalData
-{
-    /**
-     * @var ?DateTimeInterface 
-     */
-    private $authenticationTimestamp = null;
-
-    /**
-     * @var null|string 
-     */
-    private $authenticationMethod = null;
-    
+{    
     const AUTHENTICATION_METHOD_GUEST_CHECKOUT = "guestCheckout";
     const AUTHENTICATION_METHOD_LOCAL_ACCOUNT = "localAccount";
     const AUTHENTICATION_METHOD_FEDERATED_ACCOUNT = "federatedAccount";
@@ -23,12 +13,11 @@ class AuthenticationRiskData extends OptionalData
 
     /**
      * Date and time that you're submitting the authorisation.
-     * @return null|DateTimeInterface
+     * @return DateTimeInterface
      */
-    public function getAuthenticationTimestamp()
+    public function getAuthenticationTimestamp(): DateTimeInterface
     {
-        $this->protectGet('authenticationTimestamp');
-        return $this->authenticationTimestamp;
+        return $this->protectGet('authenticationTimestamp');
     }
 
     /**
@@ -37,18 +26,16 @@ class AuthenticationRiskData extends OptionalData
      */
     public function setAuthenticationTimestamp(DateTimeInterface $authenticationTimestamp)
     {
-        $this->setItem('authenticationTimestamp');
-        $this->authenticationTimestamp = $authenticationTimestamp;
+        $this->setSupportedParameter('authenticationTimestamp', $authenticationTimestamp);
     }
 
     /**
      * The method used to authenticate the shopper.
-     * @return null|string
+     * @return string
      */
-    public function getAuthenticationMethod()
+    public function getAuthenticationMethod(): string
     {
-        $this->protectGet('authenticationMethod');
-        return $this->authenticationMethod;
+        return $this->protectGet('authenticationMethod');
     }
 
     /**
@@ -58,7 +45,6 @@ class AuthenticationRiskData extends OptionalData
      */
     public function setAuthenticationMethod(string $authenticationMethod)
     {
-        $this->setItem('authenticationMethod');
-        $this->authenticationMethod = $authenticationMethod;
+        $this->setSupportedParameter('authenticationMethod', $authenticationMethod);
     }
 }

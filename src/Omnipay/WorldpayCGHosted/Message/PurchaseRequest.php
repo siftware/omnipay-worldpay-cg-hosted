@@ -24,21 +24,6 @@ class PurchaseRequest extends AbstractRequest
     const TOKEN_TYPE_MERCHANT = 'merchant';
 
     /**
-     * @var null|AuthenticationRiskData 
-     */
-    protected $authenticationRiskData = null;
-
-    /**
-     * @var null|ShopperAccountRiskData
-     */
-    protected $shopperAccountRiskData = null;
-
-    /**
-     * @var null|TransactionRiskData
-     */
-    protected $transactionRiskData = null;
-
-    /**
      * Get accept header
      *
      * @return string
@@ -316,6 +301,53 @@ class PurchaseRequest extends AbstractRequest
     }
 
     /**
+     * @param AuthenticationRiskData $authenticationRiskData
+     * @return PurchaseRequest
+     */
+    public function setAuthenticationRiskData(AuthenticationRiskData $authenticationRiskData)
+    {
+        return $this->setParameter('authenticationRiskData', $authenticationRiskData);
+    }
+
+    /**
+     * @return AuthenticationRiskData|null
+     */
+    public function getAuthenticationRiskData()
+    {
+        return $this->getParameter('authenticationRiskData');
+    }
+
+    /**
+     * @param ShopperAccountRiskData $shopperAccountRiskData
+     * @return PurchaseRequest
+     */
+    public function setShopperAccountRiskData(ShopperAccountRiskData $shopperAccountRiskData)
+    {
+        return $this->setParameter('shopperAccountRiskData', $shopperAccountRiskData);
+    }
+    
+    /**
+     * @return ShopperAccountRiskData|null
+     */
+    public function getShopperAccountRiskData()
+    {
+        return $this->getParameter('shopperAccountRiskData');
+    }
+
+    public function setTransactionRiskData(TransactionRiskData $transactionRiskData)
+    {
+        $this->setParameter('transactionRiskData', $transactionRiskData);
+    }
+
+    /**
+     * @return TransactionRiskData|null
+     */
+    public function getTransactionRiskData()
+    {
+        return $this->getParameter('transactionRiskData');
+    }
+
+    /**
      * Get data
      *
      * @return \SimpleXMLElement
@@ -402,144 +434,147 @@ class PurchaseRequest extends AbstractRequest
                 }
             }
 
-            $riskDataNode = $order->addChild('riskData');
-            
             $authenticationRiskData = $this->getAuthenticationRiskData();
-            if ($authenticationRiskData->hasProperties()) {
-                $authenticationRiskDataNode = $riskDataNode->addChild("authenticationRiskData");
-                
-                if ($authenticationRiskData->isSet('authenticationTimestamp')) {
-                    $date = $authenticationRiskData->getAuthenticationTimestamp();
-                    $dateNode = $authenticationRiskDataNode->addChild('authenticationTimestamp');
-                    $this->wpgXmlDateTime($dateNode, $date);
-                }
-
-                if ($authenticationRiskData->isSet('authenticationMethod')) {
-                    $authenticationRiskDataNode->addAttribute('authenticationMethod', $authenticationRiskData->getAuthenticationMethod());
-                }                
-            }
-            
             $shopperAccountRiskData = $this->getShopperAccountRiskData();
-            if ($shopperAccountRiskData->hasProperties()) {
-                $shopperAccountRiskDataNode = $riskDataNode->addChild("shopperAccountRiskData");
+            $transactionRiskData = $this->getTransactionRiskData();
 
-                if ($shopperAccountRiskData->isSet('shopperAccountCreationDate')) {
-                    $date = $shopperAccountRiskData->getShopperAccountCreationDate();
-                    $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountCreationDate');
-                    $this->wpgXmlDateTime($dateNode, $date);
+            if ($authenticationRiskData || $shopperAccountRiskData || $transactionRiskData) {
+                $riskDataNode = $order->addChild('riskData');
+
+                if ($authenticationRiskData && $authenticationRiskData->hasProperties()) {
+                    $authenticationRiskDataNode = $riskDataNode->addChild("authenticationRiskData");
+
+                    if ($authenticationRiskData->isSet('authenticationTimestamp')) {
+                        $date = $authenticationRiskData->getAuthenticationTimestamp();
+                        $dateNode = $authenticationRiskDataNode->addChild('authenticationTimestamp');
+                        $this->wpgXmlDateTime($dateNode, $date);
+                    }
+
+                    if ($authenticationRiskData->isSet('authenticationMethod')) {
+                        $authenticationRiskDataNode->addAttribute('authenticationMethod', $authenticationRiskData->getAuthenticationMethod());
+                    }
+                }
+            
+                if ($shopperAccountRiskData && $shopperAccountRiskData->hasProperties()) {
+                    $shopperAccountRiskDataNode = $riskDataNode->addChild("shopperAccountRiskData");
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountCreationDate')) {
+                        $date = $shopperAccountRiskData->getShopperAccountCreationDate();
+                        $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountCreationDate');
+                        $this->wpgXmlDateTime($dateNode, $date);
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountModificationDate')) {
+                        $date = $shopperAccountRiskData->getShopperAccountModificationDate();
+                        $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountModificationDate');
+                        $this->wpgXmlDateTime($dateNode, $date);
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountPasswordChangeDate')) {
+                        $date = $shopperAccountRiskData->getShopperAccountPasswordChangeDate();
+                        $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountPasswordChangeDate');
+                        $this->wpgXmlDateTime($dateNode, $date);
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountShippingAddressFirstUseDate')) {
+                        $date = $shopperAccountRiskData->getShopperAccountShippingAddressFirstUseDate();
+                        $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountShippingAddressFirstUseDate');
+                        $this->wpgXmlDateTime($dateNode, $date);
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountPaymentAccountFirstUseDate')) {
+                        $date = $shopperAccountRiskData->getShopperAccountPaymentAccountFirstUseDate();
+                        $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountPaymentAccountFirstUseDate');
+                        $this->wpgXmlDateTime($dateNode, $date);
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('transactionsAttemptedLastDay')) {
+                        $shopperAccountRiskDataNode->addAttribute('transactionsAttemptedLastDay', $shopperAccountRiskData->getTransactionsAttemptedLastDay());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('transactionsAttemptedLastYear')) {
+                        $shopperAccountRiskDataNode->addAttribute('transactionsAttemptedLastYear', $shopperAccountRiskData->getTransactionsAttemptedLastYear());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('purchasesCompletedLastSixMonths')) {
+                        $shopperAccountRiskDataNode->addAttribute('purchasesCompletedLastSixMonths', $shopperAccountRiskData->getPurchasesCompletedLastSixMonths());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('addCardAttemptsLastDay')) {
+                        $shopperAccountRiskDataNode->addAttribute('addCardAttemptsLastDay', $shopperAccountRiskData->getAddCardAttemptsLastDay());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('previousSuspiciousActivity')) {
+                        $shopperAccountRiskDataNode->addAttribute('previousSuspiciousActivity', $shopperAccountRiskData->getPreviousSuspiciousActivity() ? 'true' : 'false');
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shippingNameMatchesAccountName')) {
+                        $shopperAccountRiskDataNode->addAttribute('shippingNameMatchesAccountName', $shopperAccountRiskData->getShippingNameMatchesAccountName() ? 'true' : 'false');
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountAgeIndicator')) {
+                        $shopperAccountRiskDataNode->addAttribute('shopperAccountAgeIndicator', $shopperAccountRiskData->getShopperAccountAgeIndicator());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountChangeIndicator')) {
+                        $shopperAccountRiskDataNode->addAttribute('shopperAccountChangeIndicator', $shopperAccountRiskData->getShopperAccountChangeIndicator());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountPasswordChangeIndicator')) {
+                        $shopperAccountRiskDataNode->addAttribute('shopperAccountPasswordChangeIndicator', $shopperAccountRiskData->getShopperAccountPasswordChangeIndicator());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountShippingAddressUsageIndicator')) {
+                        $shopperAccountRiskDataNode->addAttribute('shopperAccountShippingAddressUsageIndicator', $shopperAccountRiskData->getShopperAccountShippingAddressUsageIndicator());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shopperAccountPaymentAccountIndicator')) {
+                        $shopperAccountRiskDataNode->addAttribute('shopperAccountPaymentAccountIndicator', $shopperAccountRiskData->getShopperAccountPaymentAccountIndicator());
+                    }
                 }
                 
-                if ($shopperAccountRiskData->isSet('shopperAccountModificationDate')) {
-                    $date = $shopperAccountRiskData->getShopperAccountModificationDate();
-                    $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountModificationDate');
-                    $this->wpgXmlDateTime($dateNode, $date);
-                }
-                
-                if ($shopperAccountRiskData->isSet('shopperAccountPasswordChangeDate')) {
-                    $date = $shopperAccountRiskData->getShopperAccountPasswordChangeDate();
-                    $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountPasswordChangeDate');
-                    $this->wpgXmlDateTime($dateNode, $date);
-                }
-
-                if ($shopperAccountRiskData->isSet('shopperAccountShippingAddressFirstUseDate')) {
-                    $date = $shopperAccountRiskData->getShopperAccountShippingAddressFirstUseDate();
-                    $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountShippingAddressFirstUseDate');
-                    $this->wpgXmlDateTime($dateNode, $date);
-                }
-
-                if ($shopperAccountRiskData->isSet('shopperAccountPaymentAccountFirstUseDate')) {
-                    $date = $shopperAccountRiskData->getShopperAccountPaymentAccountFirstUseDate();
-                    $dateNode = $shopperAccountRiskDataNode->addChild('shopperAccountPaymentAccountFirstUseDate');
-                    $this->wpgXmlDateTime($dateNode, $date);
-                }
-
-                if ($shopperAccountRiskData->isSet('transactionsAttemptedLastDay')) {
-                    $shopperAccountRiskDataNode->addAttribute('transactionsAttemptedLastDay', $shopperAccountRiskData->getTransactionsAttemptedLastDay());
-                }
-
-                if ($shopperAccountRiskData->isSet('transactionsAttemptedLastYear')) {
-                    $shopperAccountRiskDataNode->addAttribute('transactionsAttemptedLastYear', $shopperAccountRiskData->getTransactionsAttemptedLastYear());
-                }
-
-                if ($shopperAccountRiskData->isSet('purchasesCompletedLastSixMonths')) {
-                    $shopperAccountRiskDataNode->addAttribute('purchasesCompletedLastSixMonths', $shopperAccountRiskData->getPurchasesCompletedLastSixMonths());
-                }
-
-                if ($shopperAccountRiskData->isSet('addCardAttemptsLastDay')) {
-                    $shopperAccountRiskDataNode->addAttribute('addCardAttemptsLastDay', $shopperAccountRiskData->getAddCardAttemptsLastDay());
-                }
-
-                if ($shopperAccountRiskData->isSet('previousSuspiciousActivity')) {
-                    $shopperAccountRiskDataNode->addAttribute('previousSuspiciousActivity', $shopperAccountRiskData->getPreviousSuspiciousActivity() ? 'true' : 'false');
-                }
-
-                if ($shopperAccountRiskData->isSet('shippingNameMatchesAccountName')) {
-                    $shopperAccountRiskDataNode->addAttribute('shippingNameMatchesAccountName', $shopperAccountRiskData->getShippingNameMatchesAccountName() ? 'true' : 'false');
-                }
-
-                if ($shopperAccountRiskData->isSet('shopperAccountAgeIndicator')) {
-                    $shopperAccountRiskDataNode->addAttribute('shopperAccountAgeIndicator', $shopperAccountRiskData->getShopperAccountAgeIndicator());
-                }
-
-                if ($shopperAccountRiskData->isSet('shopperAccountChangeIndicator')) {
-                    $shopperAccountRiskDataNode->addAttribute('shopperAccountChangeIndicator', $shopperAccountRiskData->getShopperAccountChangeIndicator());
-                }
-
-                if ($shopperAccountRiskData->isSet('shopperAccountPasswordChangeIndicator')) {
-                    $shopperAccountRiskDataNode->addAttribute('shopperAccountPasswordChangeIndicator', $shopperAccountRiskData->getShopperAccountPasswordChangeIndicator());
-                }
-
-                if ($shopperAccountRiskData->isSet('shopperAccountShippingAddressUsageIndicator')) {
-                    $shopperAccountRiskDataNode->addAttribute('shopperAccountShippingAddressUsageIndicator', $shopperAccountRiskData->getShopperAccountShippingAddressUsageIndicator());
-                }
-
-                if ($shopperAccountRiskData->isSet('shopperAccountPaymentAccountIndicator')) {
-                    $shopperAccountRiskDataNode->addAttribute('shopperAccountPaymentAccountIndicator', $shopperAccountRiskData->getShopperAccountPaymentAccountIndicator());
+                if ($transactionRiskData && $transactionRiskData->hasProperties()) {
+                    $transactionRiskDataNode = $riskDataNode->addChild("transactionRiskData");
+    
+                    if ($transactionRiskData->isSet('transactionRiskDataGiftCardAmount')) {
+                        $amount = $transactionRiskData->getTransactionRiskDataGiftCardAmount();
+                        $amountNode = $transactionRiskDataNode->addChild('transactionRiskDataGiftCardAmount');
+                        $amountNode->addAttribute('value', $amount * 100);
+                        $amountNode->addAttribute('currencyCode', $this->getCurrency());
+                        $amountNode->addAttribute('exponent', 2);
+                    }
+    
+                    if ($transactionRiskData->isSet('transactionRiskDataPreOrderDate')) {
+                        $date = $transactionRiskData->getTransactionRiskDataPreOrderDate();
+                        $dateNode = $transactionRiskDataNode->addChild('transactionRiskDataPreOrderDate');
+                        $this->wpgXmlDateTime($dateNode, $date);
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('shippingMethod')) {
+                        $transactionRiskData->addAttribute('shippingMethod', $transactionRiskData->getShippingMethod());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('deliveryTimeframe')) {
+                        $transactionRiskData->addAttribute('deliveryTimeframe', $transactionRiskData->getDeliveryTimeframe());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('deliveryEmailAddress')) {
+                        $transactionRiskData->addAttribute('deliveryEmailAddress', $transactionRiskData->getDeliveryEmailAddress());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('reorderingPreviousPurchases')) {
+                        $transactionRiskData->addAttribute('reorderingPreviousPurchases', $transactionRiskData->getReorderingPreviousPurchases());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('preOrderPurchase')) {
+                        $transactionRiskData->addAttribute('preOrderPurchase', $transactionRiskData->getPreOrderPurchase());
+                    }
+    
+                    if ($shopperAccountRiskData->isSet('giftCardCount')) {
+                        $transactionRiskData->addAttribute('giftCardCount', $transactionRiskData->getGiftCardCount());
+                    }
                 }
             }
-            
-            $transactionRiskData = $this->getTransactionRiskData();
-            if ($transactionRiskData->hasProperties()) {
-                $transactionRiskDataNode = $riskDataNode->addChild("transactionRiskData");
-
-                if ($transactionRiskData->isSet('transactionRiskDataGiftCardAmount')) {
-                    $amount = $transactionRiskData->getTransactionRiskDataGiftCardAmount();
-                    $amountNode = $transactionRiskDataNode->addChild('transactionRiskDataGiftCardAmount');
-                    $amountNode->addAttribute('value', $amount * 100);
-                    $amountNode->addAttribute('currencyCode', $this->getCurrency());
-                    $amountNode->addAttribute('exponent', 2);
-                }
-                
-                if ($transactionRiskData->isSet('transactionRiskDataPreOrderDate')) {
-                    $date = $transactionRiskData->getTransactionRiskDataPreOrderDate();
-                    $dateNode = $transactionRiskDataNode->addChild('transactionRiskDataPreOrderDate');
-                    $this->wpgXmlDateTime($dateNode, $date);
-                }
-
-                if ($shopperAccountRiskData->isSet('shippingMethod')) {
-                    $transactionRiskData->addAttribute('shippingMethod', $transactionRiskData->getShippingMethod());
-                }
-
-                if ($shopperAccountRiskData->isSet('deliveryTimeframe')) {
-                    $transactionRiskData->addAttribute('deliveryTimeframe', $transactionRiskData->getDeliveryTimeframe());
-                }
-
-                if ($shopperAccountRiskData->isSet('deliveryEmailAddress')) {
-                    $transactionRiskData->addAttribute('deliveryEmailAddress', $transactionRiskData->getDeliveryEmailAddress());
-                }
-
-                if ($shopperAccountRiskData->isSet('reorderingPreviousPurchases')) {
-                    $transactionRiskData->addAttribute('reorderingPreviousPurchases', $transactionRiskData->getReorderingPreviousPurchases());
-                }
-
-                if ($shopperAccountRiskData->isSet('preOrderPurchase')) {
-                    $transactionRiskData->addAttribute('preOrderPurchase', $transactionRiskData->getPreOrderPurchase());
-                }
-
-                if ($shopperAccountRiskData->isSet('giftCardCount')) {
-                    $transactionRiskData->addAttribute('giftCardCount', $transactionRiskData->getGiftCardCount());
-                }
-            }      
         } else { // paResponse is set => the whole order contents should be (info3DSecure, session)
             $session = $order->addChild('session'); // Empty tag is valid but setting an empty ID attr isn't
             $session->addAttribute('shopperIPAddress', $this->getClientIP());
@@ -695,39 +730,6 @@ class PurchaseRequest extends AbstractRequest
 
         // Anything else: don't mask payment methods.
         return 'ALL';
-    }
-
-    /**
-     * @return AuthenticationRiskData|null
-     */
-    public function getAuthenticationRiskData(): AuthenticationRiskData
-    {
-        if (!$this->authenticationRiskData) {
-            $this->authenticationRiskData = new AuthenticationRiskData();
-        }
-        return $this->authenticationRiskData;
-    }
-
-    /**
-     * @return ShopperAccountRiskData|null
-     */
-    public function getShopperAccountRiskData(): ShopperAccountRiskData
-    {
-        if (!$this->shopperAccountRiskData) {
-            $this->shopperAccountRiskData = new ShopperAccountRiskData();
-        }
-        return $this->shopperAccountRiskData;
-    }
-
-    /**
-     * @return TransactionRiskData|null
-     */
-    public function getTransactionRiskData(): TransactionRiskData
-    {
-        if (!$this->transactionRiskData) {
-            $this->transactionRiskData = new TransactionRiskData();
-        }
-        return $this->transactionRiskData;
     }
 
     /**

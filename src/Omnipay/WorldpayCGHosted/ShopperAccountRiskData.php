@@ -6,86 +6,6 @@ use DateTimeInterface;
 
 class ShopperAccountRiskData extends OptionalData
 {
-    /**
-     * @var null|DateTimeInterface
-     */
-    private $shopperAccountCreationDate = null;
-
-    /**
-     * @var null|DateTimeInterface
-     */
-    private $shopperAccountModificationDate = null;
-
-    /**
-     * @var null|DateTimeInterface
-     */
-    private $shopperAccountPasswordChangeDate = null;
-
-    /**
-     * @var null|DateTimeInterface
-     */
-    private $shopperAccountShippingAddressFirstUseDate = null;
-
-    /**
-     * @var null|DateTimeInterface
-     */
-    private $shopperAccountPaymentAccountFirstUseDate = null;
-
-    /**
-     * @var int
-     */
-    private $transactionsAttemptedLastDay = null;
-
-    /**
-     * @var int
-     */
-    private $transactionsAttemptedLastYear = null;
-
-    /**
-     * @var int
-     */
-    private $purchasesCompletedLastSixMonths = null;
-
-    /**
-     * @var int
-     */
-    private $addCardAttemptsLastDay = null;
-
-    /**
-     * @var bool
-     */
-    private $previousSuspiciousActivity = null;
-
-    /**
-     * @var bool
-     */
-    private $shippingNameMatchesAccountName = null;
-
-    /**
-     * @var null|string
-     */
-    private $shopperAccountAgeIndicator = null;
-
-    /**
-     * @var null|string
-     */
-    private $shopperAccountChangeIndicator = null;
-
-    /**
-     * @var null|string
-     */
-    private $shopperAccountPasswordChangeIndicator = null;
-
-    /**
-     * @var null|string
-     */
-    private $shopperAccountShippingAddressUsageIndicator = null;
-
-    /**
-     * @var null|string
-     */
-    private $shopperAccountPaymentAccountIndicator = null;
-
     const SHOPPER_ACCOUNT_AGE_INDICATOR_NO_ACCOUNT = 'noAccount';
     const SHOPPER_ACCOUNT_AGE_INDICATOR_CREATED_DURING_TRANSACTION = 'createdDuringTransaction';
     const SHOPPER_ACCOUNT_AGE_INDICATOR_LESS_THAN_THIRTY_DAYS = 'lessThanThirtyDays';
@@ -120,8 +40,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountCreationDate()
     {
-        $this->protectGet('shopperAccountCreationDate');
-        return $this->shopperAccountCreationDate;
+        return $this->protectGet('shopperAccountCreationDate');
     }
 
     /**
@@ -130,8 +49,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountCreationDate(DateTimeInterface $shopperAccountCreationDate)
     {
-        $this->setItem('shopperAccountCreationDate');
-        $this->shopperAccountCreationDate = $shopperAccountCreationDate;
+        $this->setSupportedParameter('shopperAccountCreationDate', $shopperAccountCreationDate);
     }
 
     /**
@@ -140,8 +58,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountModificationDate()
     {
-        $this->protectGet('shopperAccountModificationDate');
-        return $this->shopperAccountModificationDate;
+        return $this->protectGet('shopperAccountModificationDate');
     }
 
     /**
@@ -150,8 +67,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountModificationDate(DateTimeInterface $shopperAccountModificationDate)
     {
-        $this->setItem('shopperAccountModificationDate');
-        $this->shopperAccountModificationDate = $shopperAccountModificationDate;
+        $this->setSupportedParameter('shopperAccountModificationDate', $shopperAccountModificationDate);
     }
 
     /**
@@ -160,8 +76,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountPasswordChangeDate()
     {
-        $this->protectGet('shopperAccountPasswordChangeDate');
-        return $this->shopperAccountPasswordChangeDate;
+        return $this->protectGet('shopperAccountPasswordChangeDate');
     }
 
     /**
@@ -170,8 +85,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountPasswordChangeDate(DateTimeInterface $shopperAccountPasswordChangeDate)
     {
-        $this->setItem('shopperAccountPasswordChangeDate');
-        $this->shopperAccountPasswordChangeDate = $shopperAccountPasswordChangeDate;
+        $this->setSupportedParameter('shopperAccountPasswordChangeDate', $shopperAccountPasswordChangeDate);
     }
 
     /**
@@ -180,8 +94,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountShippingAddressFirstUseDate()
     {
-        $this->protectGet('shopperAccountShippingAddressFirstUseDate');
-        return $this->shopperAccountShippingAddressFirstUseDate;
+        return $this->protectGet('shopperAccountShippingAddressFirstUseDate');
     }
 
     /**
@@ -190,8 +103,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountShippingAddressFirstUseDate(DateTimeInterface $shopperAccountShippingAddressFirstUseDate)
     {
-        $this->setItem('shopperAccountShippingAddressFirstUseDate');
-        $this->shopperAccountShippingAddressFirstUseDate = $shopperAccountShippingAddressFirstUseDate;
+        $this->setSupportedParameter('shopperAccountShippingAddressFirstUseDate', $shopperAccountShippingAddressFirstUseDate);
     }
 
     /**
@@ -200,8 +112,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountPaymentAccountFirstUseDate()
     {
-        $this->protectGet('shopperAccountPaymentAccountFirstUseDate');
-        return $this->shopperAccountPaymentAccountFirstUseDate;
+        return $this->protectGet('shopperAccountPaymentAccountFirstUseDate');
     }
 
     /**
@@ -210,8 +121,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountPaymentAccountFirstUseDate(DateTimeInterface $shopperAccountPaymentAccountFirstUseDate)
     {
-        $this->setItem('shopperAccountPaymentAccountFirstUseDate');
-        $this->shopperAccountPaymentAccountFirstUseDate = $shopperAccountPaymentAccountFirstUseDate;
+        $this->setSupportedParameter('shopperAccountPaymentAccountFirstUseDate', $shopperAccountPaymentAccountFirstUseDate);
     }
 
     /**
@@ -220,8 +130,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getTransactionsAttemptedLastDay()
     {
-        $this->protectGet('transactionsAttemptedLastDay');
-        return $this->transactionsAttemptedLastDay;
+        return $this->protectGet('transactionsAttemptedLastDay');
     }
 
     /**
@@ -230,8 +139,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setTransactionsAttemptedLastDay(int $transactionsAttemptedLastDay)
     {
-        $this->setItem('transactionsAttemptedLastDay');
-        $this->transactionsAttemptedLastDay = $transactionsAttemptedLastDay;
+        $this->setSupportedParameter('transactionsAttemptedLastDay', $transactionsAttemptedLastDay);
     }
 
     /**
@@ -240,8 +148,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getTransactionsAttemptedLastYear()
     {
-        $this->protectGet('transactionsAttemptedLastYear');
-        return $this->transactionsAttemptedLastYear;
+        return $this->protectGet('transactionsAttemptedLastYear');
     }
 
     /**
@@ -250,8 +157,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setTransactionsAttemptedLastYear(int $transactionsAttemptedLastYear)
     {
-        $this->setItem('transactionsAttemptedLastYear');
-        $this->transactionsAttemptedLastYear = $transactionsAttemptedLastYear;
+        $this->setSupportedParameter('transactionsAttemptedLastYear', $transactionsAttemptedLastYear);
     }
 
     /**
@@ -260,8 +166,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getPurchasesCompletedLastSixMonths()
     {
-        $this->protectGet('purchasesCompletedLastSixMonths');
-        return $this->purchasesCompletedLastSixMonths;
+        return $this->protectGet('purchasesCompletedLastSixMonths');
     }
 
     /**
@@ -270,8 +175,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setPurchasesCompletedLastSixMonths(int $purchasesCompletedLastSixMonths)
     {
-        $this->setItem('purchasesCompletedLastSixMonths');
-        $this->purchasesCompletedLastSixMonths = $purchasesCompletedLastSixMonths;
+        $this->setSupportedParameter('purchasesCompletedLastSixMonths', $purchasesCompletedLastSixMonths);
     }
 
     /**
@@ -280,8 +184,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getAddCardAttemptsLastDay()
     {
-        $this->protectGet('addCardAttemptsLastDay');
-        return $this->addCardAttemptsLastDay;
+        return $this->protectGet('addCardAttemptsLastDay');
     }
 
     /**
@@ -290,8 +193,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setAddCardAttemptsLastDay(int $addCardAttemptsLastDay)
     {
-        $this->setItem('addCardAttemptsLastDay');
-        $this->addCardAttemptsLastDay = $addCardAttemptsLastDay;
+        $this->setSupportedParameter('addCardAttemptsLastDay', $addCardAttemptsLastDay);
     }
 
     /**
@@ -300,8 +202,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getPreviousSuspiciousActivity()
     {
-        $this->protectGet('previousSuspiciousActivity');
-        return $this->previousSuspiciousActivity;
+        return $this->protectGet('previousSuspiciousActivity');
     }
 
     /**
@@ -310,8 +211,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setPreviousSuspiciousActivity(bool $previousSuspiciousActivity)
     {
-        $this->setItem('previousSuspiciousActivity');
-        $this->previousSuspiciousActivity = $previousSuspiciousActivity;
+        $this->setSupportedParameter('previousSuspiciousActivity', $previousSuspiciousActivity);
     }
 
     /**
@@ -320,8 +220,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShippingNameMatchesAccountName()
     {
-        $this->protectGet('shippingNameMatchesAccountName');
-        return $this->shippingNameMatchesAccountName;
+        return $this->protectGet('shippingNameMatchesAccountName');
     }
 
     /**
@@ -330,8 +229,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShippingNameMatchesAccountName(bool $shippingNameMatchesAccountName)
     {
-        $this->setItem('shippingNameMatchesAccountName');
-        $this->shippingNameMatchesAccountName = $shippingNameMatchesAccountName;
+        $this->setSupportedParameter('shippingNameMatchesAccountName', $shippingNameMatchesAccountName);
     }
 
     /**
@@ -340,8 +238,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountAgeIndicator()
     {
-        $this->protectGet('shopperAccountAgeIndicator');
-        return $this->shopperAccountAgeIndicator;
+        return $this->protectGet('shopperAccountAgeIndicator');
     }
 
     /**
@@ -351,8 +248,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountAgeIndicator(string $shopperAccountAgeIndicator)
     {
-        $this->setItem('shopperAccountAgeIndicator');
-        $this->shopperAccountAgeIndicator = $shopperAccountAgeIndicator;
+        $this->setSupportedParameter('shopperAccountAgeIndicator', $shopperAccountAgeIndicator);
     }
 
     /**
@@ -361,8 +257,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountChangeIndicator()
     {
-        $this->protectGet('shopperAccountChangeIndicator');
-        return $this->shopperAccountChangeIndicator;
+        return $this->protectGet('shopperAccountChangeIndicator');
     }
 
     /**
@@ -372,8 +267,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountChangeIndicator(string $shopperAccountChangeIndicator)
     {
-        $this->setItem('shopperAccountChangeIndicator');
-        $this->shopperAccountChangeIndicator = $shopperAccountChangeIndicator;
+        $this->setSupportedParameter('shopperAccountChangeIndicator', $shopperAccountChangeIndicator);
     }
 
     /**
@@ -382,8 +276,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountPasswordChangeIndicator()
     {
-        $this->protectGet('shopperAccountPasswordChangeIndicator');
-        return $this->shopperAccountPasswordChangeIndicator;
+        return $this->protectGet('shopperAccountPasswordChangeIndicator');
     }
 
     /**
@@ -393,8 +286,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountPasswordChangeIndicator(string $shopperAccountPasswordChangeIndicator)
     {
-        $this->setItem('shopperAccountPasswordChangeIndicator');
-        $this->shopperAccountPasswordChangeIndicator = $shopperAccountPasswordChangeIndicator;
+        $this->setSupportedParameter('shopperAccountPasswordChangeIndicator', $shopperAccountPasswordChangeIndicator);
     }
 
     /**
@@ -403,8 +295,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountShippingAddressUsageIndicator()
     {
-        $this->protectGet('shopperAccountShippingAddressUsageIndicator');
-        return $this->shopperAccountShippingAddressUsageIndicator;
+        return $this->protectGet('shopperAccountShippingAddressUsageIndicator');
     }
 
     /**
@@ -414,8 +305,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountShippingAddressUsageIndicator(string $shopperAccountShippingAddressUsageIndicator)
     {
-        $this->setItem('shopperAccountShippingAddressUsageIndicator');
-        $this->shopperAccountShippingAddressUsageIndicator = $shopperAccountShippingAddressUsageIndicator;
+        $this->setSupportedParameter('shopperAccountShippingAddressUsageIndicator', $shopperAccountShippingAddressUsageIndicator);
     }
 
     /**
@@ -424,8 +314,7 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function getShopperAccountPaymentAccountIndicator()
     {
-        $this->protectGet('shopperAccountPaymentAccountIndicator');
-        return $this->shopperAccountPaymentAccountIndicator;
+        return $this->protectGet('shopperAccountPaymentAccountIndicator');
     }
 
     /**
@@ -435,7 +324,6 @@ class ShopperAccountRiskData extends OptionalData
      */
     public function setShopperAccountPaymentAccountIndicator(string $shopperAccountPaymentAccountIndicator)
     {
-        $this->setItem('shopperAccountPaymentAccountIndicator');
-        $this->shopperAccountPaymentAccountIndicator = $shopperAccountPaymentAccountIndicator;
+        $this->setSupportedParameter('shopperAccountPaymentAccountIndicator', $shopperAccountPaymentAccountIndicator);
     }
 }

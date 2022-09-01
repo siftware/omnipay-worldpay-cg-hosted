@@ -6,47 +6,6 @@ use DateTimeInterface;
 
 class TransactionRiskData extends OptionalData
 {
-    /**
-     * @var null|float 
-     */
-    private $transactionRiskDataGiftCardAmount = null;
-
-    /**
-     * @var null|DateTimeInterface
-     */
-    private $transactionRiskDataPreOrderDate = null;
-
-    /**
-     * @var null|string
-     */
-    private $shippingMethod = null;
-
-    /**
-     * @var null|string
-     */    
-    private $deliveryTimeframe = null;
-
-    /**
-     * @var null|string
-     */
-    private $deliveryEmailAddress = null;
-
-
-    /**
-     * @var null|bool
-     */
-    private $reorderingPreviousPurchases = null;
-    
-    /**
-     * @var null|bool
-     */
-    private $preOrderPurchase = null;
-    
-    /**
-     * @var null|int
-     */
-    private $giftCardCount = null;
-
     const SHIPPING_METHOD_SHIP_TO_BILLING_ADDRESS = 'shipToBillingAddress';
     const SHIPPING_METHOD_SHIP_TO_VERIFIED_ADDRESS = 'shipToVerifiedAddress';
     const SHIPPING_METHOD_SHIP_TO_OTHER_ADDRESS = 'shipToOtherAddress';
@@ -66,8 +25,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getTransactionRiskDataGiftCardAmount(): float
     {
-        $this->protectGet('transactionRiskDataGiftCardAmount');
-        return $this->transactionRiskDataGiftCardAmount;
+        return $this->protectGet('transactionRiskDataGiftCardAmount');
     }
 
     /**
@@ -76,8 +34,7 @@ class TransactionRiskData extends OptionalData
      */
     public function setTransactionRiskDataGiftCardAmount(float $transactionRiskDataGiftCardAmount)
     {
-        $this->setItem('transactionRiskDataGiftCardAmount');
-        $this->transactionRiskDataGiftCardAmount = $transactionRiskDataGiftCardAmount;
+        $this->setSupportedParameter('transactionRiskDataGiftCardAmount', $transactionRiskDataGiftCardAmount);
     }
 
     /**
@@ -86,8 +43,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getTransactionRiskDataPreOrderDate(): DateTimeInterface
     {
-        $this->protectGet('transactionRiskDataPreOrderDate');
-        return $this->transactionRiskDataPreOrderDate;
+        return $this->protectGet('transactionRiskDataPreOrderDate');
     }
 
     /**
@@ -96,8 +52,7 @@ class TransactionRiskData extends OptionalData
      */
     public function setTransactionRiskDataPreOrderDate(DateTimeInterface $transactionRiskDataPreOrderDate)
     {
-        $this->setItem('transactionRiskDataPreOrderDate');
-        $this->transactionRiskDataPreOrderDate = $transactionRiskDataPreOrderDate;
+        $this->setSupportedParameter('transactionRiskDataPreOrderDate', $transactionRiskDataPreOrderDate);
     }
 
     /**
@@ -106,8 +61,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getShippingMethod(): string
     {
-        $this->protectGet('shippingMethod');
-        return $this->shippingMethod;
+        return $this->protectGet('shippingMethod');
     }
 
     /**
@@ -117,8 +71,7 @@ class TransactionRiskData extends OptionalData
      */
     public function setShippingMethod(string $shippingMethod)
     {
-        $this->setItem('shippingMethod');
-        $this->shippingMethod = $shippingMethod;
+        $this->setSupportedParameter('shippingMethod', $shippingMethod);
     }
 
     /**
@@ -127,8 +80,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getDeliveryTimeframe(): string
     {
-        $this->protectGet('deliveryTimeframe');
-        return $this->deliveryTimeframe;
+        return $this->protectGet('deliveryTimeframe');
     }
 
     /**
@@ -138,8 +90,7 @@ class TransactionRiskData extends OptionalData
      */
     public function setDeliveryTimeframe(string $deliveryTimeframe)
     {
-        $this->setItem('deliveryTimeframe');
-        $this->deliveryTimeframe = $deliveryTimeframe;
+        $this->setSupportedParameter('deliveryTimeframe', $deliveryTimeframe);
     }
 
     /**
@@ -148,8 +99,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getDeliveryEmailAddress(): string
     {
-        $this->protectGet('deliveryEmailAddress');
-        return $this->deliveryEmailAddress;
+        return $this->protectGet('deliveryEmailAddress');
     }
 
     /**
@@ -158,8 +108,7 @@ class TransactionRiskData extends OptionalData
      */
     public function setDeliveryEmailAddress(string $deliveryEmailAddress)
     {
-        $this->setItem('deliveryEmailAddress');
-        $this->deliveryEmailAddress = $deliveryEmailAddress;
+        $this->setSupportedParameter('deliveryEmailAddress', $deliveryEmailAddress);
     }
 
     /**
@@ -168,8 +117,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getReorderingPreviousPurchases(): bool
     {
-        $this->protectGet('reorderingPreviousPurchases');
-        return $this->reorderingPreviousPurchases;
+        return $this->protectGet('reorderingPreviousPurchases');
     }
 
     /**
@@ -178,8 +126,7 @@ class TransactionRiskData extends OptionalData
      */
     public function setReorderingPreviousPurchases(bool $reorderingPreviousPurchases)
     {
-        $this->setItem('reorderingPreviousPurchases');
-        $this->reorderingPreviousPurchases = $reorderingPreviousPurchases;
+        $this->setSupportedParameter('reorderingPreviousPurchases', $reorderingPreviousPurchases);
     }
 
     /**
@@ -188,8 +135,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getPreOrderPurchase(): bool
     {
-        $this->protectGet('preOrderPurchase');
-        return $this->preOrderPurchase;
+        return $this->protectGet('preOrderPurchase');
     }
 
     /**
@@ -198,8 +144,7 @@ class TransactionRiskData extends OptionalData
      */
     public function setPreOrderPurchase(bool $preOrderPurchase)
     {
-        $this->setItem('preOrderPurchase');
-        $this->preOrderPurchase = $preOrderPurchase;
+        $this->setSupportedParameter('preOrderPurchase', $preOrderPurchase);
     }
 
     /**
@@ -208,8 +153,7 @@ class TransactionRiskData extends OptionalData
      */
     public function getGiftCardCount(): int
     {
-        $this->protectGet('giftCardCount');
-        return $this->giftCardCount;
+        return $this->protectGet('giftCardCount');
     }
 
     /**
@@ -218,7 +162,6 @@ class TransactionRiskData extends OptionalData
      */
     public function setGiftCardCount(int $giftCardCount)
     {
-        $this->setItem('giftCardCount');
-        $this->giftCardCount = $giftCardCount;
+        $this->setSupportedParameter('giftCardCount', $giftCardCount);
     }
 }
