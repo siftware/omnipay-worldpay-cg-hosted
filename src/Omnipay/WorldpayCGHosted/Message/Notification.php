@@ -5,12 +5,13 @@ namespace Omnipay\WorldpayCGHosted\Message;
 use DOMDocument;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractResponse;
+use Omnipay\Common\Message\NotificationInterface;
 
 /**
  * WorldPay XML Notification - not technically a response but shares
  * most of the same general XML payload structure.
  */
-class Notification extends AbstractResponse
+class Notification extends AbstractResponse implements NotificationInterface
 {
     use ResponseTrait;
 
@@ -237,5 +238,20 @@ class Notification extends AbstractResponse
         }
 
         return $this->getOrder()->token;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTransactionStatus()
+    {
+        if (!$this->isValid()) {
+            return NotificationInterface::STATUS_FAILED;
+        }
+        if ($this->isSuccessful())
+        {
+            return NotificationInterface::STATUS_COMPLETED;
+        }
+        return NotificationInterface::STATUS_FAILED;
     }
 }

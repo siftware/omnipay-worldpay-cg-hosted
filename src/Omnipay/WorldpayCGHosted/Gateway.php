@@ -3,6 +3,7 @@
 namespace Omnipay\WorldpayCGHosted;
 
 use Omnipay\Common\AbstractGateway;
+use Omnipay\WorldpayCGHosted\Message\Notification;
 
 /**
  * WorldPay Hosted Corporate Gateway (XML)
@@ -244,5 +245,39 @@ class Gateway extends AbstractGateway
             Message\PurchaseRequest::class,
             $parameters
         );
+    }
+
+    public function acceptNotification(array $options = array()): \Omnipay\Common\Message\NotificationInterface
+    {
+        $data = $this->httpRequest->getContent();
+        $this->quickLog($_SERVER, "a", 'wpg-notification');
+        $this->quickLog($data, "a", 'wpg-notification');
+
+
+        return new Notification($data, $this->httpRequest->getClientIp());
+    }
+
+    function	quickLog($debugData,$mode = "w",$file = false){
+        //print_r whatever is passed to a log file
+
+        $data	= 	print_r($debugData,true);
+
+        if (!$file){
+            $file 	= 	STORAGE_DIRECTORY . "/logs/quickLog.txt";
+        }
+        else {
+            $file = 		STORAGE_DIRECTORY . "/logs/".$file;
+        }
+
+        $res	=	fopen($file,$mode);
+
+        if		(	fwrite($res,$data)	){
+            $close	=	fclose($res);
+            return true;
+        }
+        else 	{
+            $close	=	fclose($res);
+            return false;
+        }
     }
 }
