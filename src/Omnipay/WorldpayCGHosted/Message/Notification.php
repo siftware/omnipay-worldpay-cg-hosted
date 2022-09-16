@@ -263,4 +263,93 @@ class Notification extends AbstractResponse implements NotificationInterface
         }
         return NotificationInterface::STATUS_FAILED;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTransactionId(): ?string
+    {
+        if (empty($this->getOrder())) {
+            return null;
+        }
+
+        /**
+         * @var \SimpleXMLElement $orderStatusEventNode
+         */
+        $orderStatusEventNode = $this->getOrder();
+
+        if (!isset($orderStatusEventNode['orderCode'])) {
+            return null;
+        }
+
+        return $orderStatusEventNode['orderCode'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTransactionReference(): ?string
+    {
+        // WPG uses our unique reference and no other
+        return $this->getTransactionId();
+    }
+
+    /**
+     * Get provider authorisation code
+     * @return string|null
+     */
+    public function getAuthorisationCode(): ?string
+    {
+        if (empty($this->getOrder())) {
+            return null;
+        }
+
+        if (empty($this->getOrder()->payment)) {
+            return null;
+        }
+
+        if (empty($this->getOrder()->payment->AuthorisationId)) {
+            return null;
+        }
+
+        $authorisationIdNode = $this->getOrder()->payment->AuthorisationId;
+
+        return $authorisationIdNode['id'] ?? null;
+    }
+
+    /**
+     * @param bool $allowIpBasedOriginCheck
+     * @return Notification
+     */
+    public function setAllowIpBasedOriginCheck(bool $allowIpBasedOriginCheck): Notification
+    {
+        $this->allowIpBasedOriginCheck = $allowIpBasedOriginCheck;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowIpBasedOriginCheck(): bool
+    {
+        return $this->allowIpBasedOriginCheck;
+    }
+
+    /**
+     * @param bool $allowHostnameBasedOriginCheck
+     * @return Notification
+     */
+    public function setAllowHostnameBasedOriginCheck(bool $allowHostnameBasedOriginCheck): Notification
+    {
+        $this->allowHostnameBasedOriginCheck = $allowHostnameBasedOriginCheck;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowHostnameBasedOriginCheck(): bool
+    {
+        return $this->allowHostnameBasedOriginCheck;
+    }
 }
