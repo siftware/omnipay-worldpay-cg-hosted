@@ -254,7 +254,16 @@ class Gateway extends AbstractGateway
         $this->quickLog($data, "a", 'wpg-notification');
 
 
-        return new Notification($data, $this->httpRequest->getClientIp());
+        $notification = new Notification($data, $this->httpRequest->getClientIp());
+
+        if (($options['disable_ip_checks'] ?? false) === true) {
+            $notification->setAllowIpBasedOriginCheck(false);
+        }
+        if (($options['disable_hostname_checks'] ?? false) === true) {
+            $notification->setAllowHostnameBasedOriginCheck(false);
+        }
+
+        return $notification;
     }
 
     function	quickLog($debugData,$mode = "w",$file = false){
