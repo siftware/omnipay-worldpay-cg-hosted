@@ -26,6 +26,9 @@ class Notification extends AbstractResponse implements NotificationInterface
     /** @var bool */
     private $allowIpBasedOriginCheck = true;
 
+    /** @var bool */
+    private $allowHostnameBasedOriginCheck = true;
+
     /** @noinspection PhpMissingParentConstructorInspection
      * @param string                $data
      * @param string                $notificationOriginIp
@@ -195,20 +198,26 @@ class Notification extends AbstractResponse implements NotificationInterface
      */
     private function originIsValid()
     {
+        if (!($this->allowIpBasedOriginCheck || $this->allowHostnameBasedOriginCheck)) {
+            return true;
+        }
+
         if (empty($this->originIp)) {
             return false;
         }
 
         $hostname = @gethostbyaddr($this->originIp);
-        if (!$hostname) { // Empty string or boolean false
-            return false;
-        }
+        if ($this->allowHostnameBasedOriginCheck) {
+            if (!$hostname) { // Empty string or boolean false
+                return false;
+            }
 
-        $expectedEnd = '.worldpay.com';
-        $expectedPosition = strlen($hostname) - strlen($expectedEnd);
+            $expectedEnd = '.worldpay.com';
+            $expectedPosition = strlen($hostname) - strlen($expectedEnd);
 
-        if (strpos($hostname, $expectedEnd) === $expectedPosition || $hostname === 'worldpay.com') {
-            return true;
+            if (strpos($hostname, $expectedEnd) === $expectedPosition || $hostname === 'worldpay.com') {
+                return true;
+            }
         }
 
         if ($this->allowIpBasedOriginCheck &&
