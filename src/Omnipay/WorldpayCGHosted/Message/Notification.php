@@ -318,6 +318,36 @@ class Notification extends AbstractResponse implements NotificationInterface
     }
 
     /**
+     * Get payment amount
+     * @return float|null
+     */
+    public function getAmount(): ?float
+    {
+        if (empty($this->getOrder())) {
+            return null;
+        }
+
+        if (empty($this->getOrder()->payment)) {
+            return null;
+        }
+
+        if (!isset($this->getOrder()->payment->amount)) {
+            return null;
+        }
+
+        if (!isset($this->getOrder()->payment->amount['value'])){
+            return null;
+        }
+
+        $amount = $this->getOrder()->payment->amount['value'];
+        if ($this->getOrder()->payment->amount['exponent']) {
+            $amount = $amount * pow(10, -($this->getOrder()->payment->amount['exponent']));
+        }
+
+        return $amount;
+    }
+
+    /**
      * @param bool $allowIpBasedOriginCheck
      * @return Notification
      */
