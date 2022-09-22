@@ -308,7 +308,7 @@ class Notification extends AbstractResponse implements NotificationInterface
             return null;
         }
 
-        if (empty($this->getOrder()->payment->AuthorisationId)) {
+        if (!isset($this->getOrder()->payment->AuthorisationId)) {
             return null;
         }
 
